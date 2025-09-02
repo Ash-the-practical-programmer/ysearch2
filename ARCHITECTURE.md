@@ -43,7 +43,6 @@ YSearch2 is a full-stack web search platform that leverages multiple AI agents w
 - **Backend**: FastAPI (Python), Redis for caching
 - **Database**: PostgreSQL for user data, Elasticsearch for search index
 - **AI/ML**: DSPy, Tencent/Youtu-agent, SSRL implementation
-- **Infrastructure**: Docker, Kubernetes (for deployment)
 - **Package Management**: UV for Python dependency management
 
 ## Detailed Architecture

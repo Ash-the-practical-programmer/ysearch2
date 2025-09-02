@@ -28,7 +28,6 @@ YSearch2 is an advanced web search platform that leverages multiple AI agents wo
 - **Backend**: FastAPI (Python), Redis for caching
 - **Database**: PostgreSQL for user data, Elasticsearch for search index
 - **AI/ML**: DSPy, Tencent/Youtu-agent, Custom SSRL Implementation
-- **Infrastructure**: Docker, Kubernetes (for deployment)
 - **Package Management**: UV for Python dependency management
 
 ## Project Structure
@@ -57,9 +56,6 @@ YSearch2 is an advanced web search platform that leverages multiple AI agents wo
 │   └── youtu_integration/# Tencent/Youtu-agent integration
 ├── tests/                # Test suite
 ├── docs/                 # Documentation
-├── docker-compose.yml    # Docker Compose configuration
-├── Dockerfile.backend    # Backend Dockerfile
-├── Dockerfile.frontend   # Frontend Dockerfile
 ├── README.md             # This file
 └── ARCHITECTURE.md       # Detailed system architecture
 ```
@@ -70,27 +66,9 @@ YSearch2 is an advanced web search platform that leverages multiple AI agents wo
 
 - Python 3.8+
 - Node.js 14+
-- Docker and Docker Compose (recommended)
 - UV package manager (https://github.com/astral-sh/uv)
 
-### Quick Start with Docker
-
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd ysearch2
-   ```
-
-2. Run the application:
-   ```bash
-   docker-compose up --build
-   ```
-
-The application will be available at:
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-
-### Manual Installation
+### Installation
 
 #### Backend Setup
 

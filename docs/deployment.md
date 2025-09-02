@@ -4,46 +4,44 @@
 
 YSearch2 can be deployed in several ways depending on your infrastructure and requirements:
 
-### 1. Docker Compose (Recommended for Development)
+### 1. Manual Deployment
 
 For local development and testing:
 
-```bash
-docker-compose up --build
-```
+1. Start the backend API:
+   ```bash
+   cd backend
+   uvicorn main:app --reload
+   ```
 
-This will start all services:
+2. Start the frontend:
+   ```bash
+   cd frontend
+   npm start
+   ```
+
+The application will be available at:
 - Backend API on http://localhost:8000
 - Frontend on http://localhost:3000
-- PostgreSQL database
-- Redis cache
 
-### 2. Kubernetes (Recommended for Production)
-
-For production deployments, use the provided Kubernetes manifests:
-
-```bash
-kubectl apply -f k8s/
-```
-
-### 3. Cloud Platforms
+### 2. Cloud Platforms
 
 #### AWS Deployment
-1. Create an ECS cluster
-2. Deploy the backend as a service
-3. Deploy the frontend as a service
+1. Set up EC2 instances for the backend and frontend
+2. Deploy the backend service
+3. Deploy the frontend service
 4. Set up RDS for PostgreSQL
 5. Set up ElastiCache for Redis
 
 #### Google Cloud Deployment
-1. Create a GKE cluster
-2. Deploy using the Kubernetes manifests
+1. Set up Compute Engine instances
+2. Deploy the backend and frontend services
 3. Use Cloud SQL for PostgreSQL
 4. Use Memorystore for Redis
 
 #### Azure Deployment
-1. Create an AKS cluster
-2. Deploy using the Kubernetes manifests
+1. Set up Virtual Machines for the backend and frontend
+2. Deploy the backend and frontend services
 3. Use Azure Database for PostgreSQL
 4. Use Azure Cache for Redis
 
