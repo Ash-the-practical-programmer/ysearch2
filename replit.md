@@ -1,6 +1,6 @@
 # Overview
 
-YSearch2 is a personalized agentic web search platform that combines multiple AI agents working in coordination to provide intelligent, personalized search experiences. The system uses advanced machine learning techniques including DSPy for natural language processing, multi-modal search capabilities through Tencent/Youtu-agent integration, and Self-Search Reinforcement Learning (SSRL) for continuous improvement based on user feedback.
+YSearch2 is a personalized agentic web search platform that combines multiple AI agents working in coordination to provide intelligent, personalized search experiences. The system has been enhanced with GEPA (Generalized Experience-based Program Adaptation) optimizers for online learning and real-time search result improvement. The platform features a modern Next.js frontend with integrated GEPA optimization dashboard and a FastAPI backend with simplified but functional ML/AI integration.
 
 # User Preferences
 
