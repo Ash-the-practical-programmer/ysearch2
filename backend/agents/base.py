@@ -1,6 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any, List
 import asyncio
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+
 from ml.youtu_integration.client import YoutuSearchClient
 from services.personalization import personalization_service
 
@@ -11,6 +15,8 @@ class BaseAgent(ABC):
         self.agent_id = agent_id
         self.name = name
         self.status = "idle"
+        self.success_count = 0
+        self.error_count = 0
         
     @abstractmethod
     async def process(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -22,7 +28,9 @@ class BaseAgent(ABC):
         return {
             "agent_id": self.agent_id,
             "name": self.name,
-            "status": self.status
+            "status": self.status,
+            "success_count": self.success_count,
+            "error_count": self.error_count
         }
 
 class SearchAgent(BaseAgent):

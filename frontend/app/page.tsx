@@ -1,5 +1,7 @@
 import type { Metadata } from "next"
 import SearchOrchestrator from "@/components/search-orchestrator"
+import { SearchInterface } from "@/components/search-interface"
+import { GEPADashboard } from "@/components/gepa-dashboard"
 
 export const metadata: Metadata = {
   title: "Symphonic Search — Augmented Intelligence",
@@ -40,6 +42,19 @@ export default function Page() {
             </p>
             <div className="mt-4">
               <SearchOrchestrator />
+            </div>
+            
+            {/* Add GEPA-Enhanced Search */}
+            <div className="mt-8 border-t border-[var(--line)]/30 pt-6">
+              <h2 className="text-lg font-semibold mb-4">Enhanced Search with AI Optimization</h2>
+              <div className="rounded-lg border border-[var(--line)]/50 p-4">
+                <SearchInterface />
+              </div>
+            </div>
+            
+            {/* GEPA Dashboard */}
+            <div className="mt-8 border-t border-[var(--line)]/30 pt-6">
+              <GEPADashboard />
             </div>
           </div>
         </div>

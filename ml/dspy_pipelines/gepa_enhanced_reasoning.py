@@ -44,9 +44,7 @@ class GEPAEnhancedSearchPipeline(dspy.Module):
         # GEPA optimizer for online learning
         self.gepa_optimizer = GEPA(
             metric=self._search_quality_metric,
-            breadth=3,
-            depth=2,
-            init_temperature=1.0
+            auto=True
         )
         
         # Learning parameters
@@ -57,21 +55,32 @@ class GEPAEnhancedSearchPipeline(dspy.Module):
         self.feedback_history = []
         self.performance_metrics = {}
         
-    def _search_quality_metric(self, predicted_results, actual_feedback):
+    def _search_quality_metric(self, gold, pred, trace, pred_name, pred_trace):
         """
         Custom metric to evaluate search result quality based on user feedback
+        Compatible with GEPA requirements: (gold, pred, trace, pred_name, pred_trace)
         """
-        if not actual_feedback:
-            return 0.0
+        try:
+            # Extract feedback from gold (expected) data
+            actual_feedback = gold.get('feedback', []) if hasattr(gold, 'get') else []
             
-        # Calculate quality score based on user interactions
-        clicks = sum(1 for f in actual_feedback if f.get('type') == 'click')
-        likes = sum(1 for f in actual_feedback if f.get('type') == 'like')
-        dislikes = sum(1 for f in actual_feedback if f.get('type') == 'dislike')
-        
-        # Weighted quality score
-        quality_score = (clicks * 0.3 + likes * 0.5 - dislikes * 0.4) / len(actual_feedback)
-        return max(0.0, min(1.0, quality_score))
+            if not actual_feedback:
+                return 0.5  # Neutral score for no feedback
+                
+            # Calculate quality score based on user interactions
+            clicks = sum(1 for f in actual_feedback if f.get('type') == 'click')
+            likes = sum(1 for f in actual_feedback if f.get('type') == 'like')
+            dislikes = sum(1 for f in actual_feedback if f.get('type') == 'dislike')
+            
+            if len(actual_feedback) == 0:
+                return 0.5
+            
+            # Weighted quality score
+            quality_score = (clicks * 0.3 + likes * 0.5 - dislikes * 0.4) / len(actual_feedback)
+            return max(0.0, min(1.0, quality_score))
+            
+        except Exception:
+            return 0.5  # Return neutral score on any error
     
     def forward(self, query: str, initial_results: List[Dict], user_context: Dict, 
                 user_feedback: Optional[List[Dict]] = None):
