@@ -1,0 +1,307 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Core palette (5 colors total + destructive for semantics) */
+  --background: #0e1f1b; /* deep forest green */
+  --foreground: #e8efe9; /* soft off-white */
+  --muted: #96aca1; /* muted sage */
+  --primary: #9be4c9; /* mint accent for focus/actions */
+  --ink: #0b1412; /* near-black for strong contrast text */
+
+  --destructive: #ff5c5c;
+
+  /* Surface tokens */
+  --card: #102520; /* darker panel tint */
+  --card-foreground: var(--foreground);
+  --popover: #102520;
+  --popover-foreground: var(--foreground);
+
+  /* Component tokens */
+  --accent: var(--primary);
+  --accent-foreground: #0b1412;
+  --secondary: #cbeadb; /* lighter mint used sparingly */
+  --secondary-foreground: #0b1412;
+  --border: #3a4a44; /* subtle green-graphite */
+  --input: #0f221e;
+  --ring: var(--primary);
+
+  /* Chart tokens mapped to palette */
+  --chart-1: var(--primary);
+  --chart-2: var(--secondary);
+  --chart-3: var(--muted);
+  --chart-4: var(--foreground);
+  --chart-5: var(--card);
+
+  /* Radius */
+  --radius: 0.75rem;
+
+  /* Sidebar */
+  --sidebar: #0f221e;
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: #0b1412;
+  --sidebar-accent: var(--secondary);
+  --sidebar-accent-foreground: #0b1412;
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--primary);
+
+  /* Legacy tokens (for backward compatibility with current components) */
+  --bg: var(--background);
+  --panel: var(--card);
+  --fg: var(--foreground);
+  --line: var(--border);
+  --brand: var(--primary);
+  --accent-legacy: var(--secondary);
+
+  /* Fonts */
+  --font-space-grotesk: "Space Grotesk", sans-serif;
+  --font-geist-sans: "Geist Sans", sans-serif;
+  --font-geist-mono: "Geist Mono", monospace;
+  --font-inter: "Inter", ui-sans-serif;
+  --font-heading-serif: "Fraunces", serif;
+}
+
+.dark {
+  /* Core palette (5 colors total + destructive for semantics) */
+  --background: #0e1f1b;
+  --foreground: #e8efe9;
+  --muted: #96aca1;
+  --primary: #9be4c9;
+  --ink: #0b1412;
+
+  --destructive: #ff5c5c;
+
+  /* Surface tokens */
+  --card: #102520;
+  --card-foreground: #e8efe9;
+  --popover: #102520;
+  --popover-foreground: #e8efe9;
+
+  /* Component tokens */
+  --accent: #9be4c9;
+  --accent-foreground: #0b1412;
+  --secondary: #cbeadb;
+  --secondary-foreground: #0b1412;
+  --border: #3a4a44;
+  --input: #0f221e;
+  --ring: #9be4c9;
+
+  /* Chart tokens mapped to palette */
+  --chart-1: #9be4c9;
+  --chart-2: #cbeadb;
+  --chart-3: #e8efe9;
+  --chart-4: #96aca1;
+  --chart-5: #102520;
+
+  /* Sidebar */
+  --sidebar: #0f221e;
+  --sidebar-foreground: #e8efe9;
+  --sidebar-primary: #9be4c9;
+  --sidebar-primary-foreground: #0b1412;
+  --sidebar-accent: #cbeadb;
+  --sidebar-accent-foreground: #0b1412;
+  --sidebar-border: #3a4a44;
+  --sidebar-ring: #9be4c9;
+
+  /* Legacy tokens (dark parity) */
+  --bg: #0e1f1b;
+  --panel: #102520;
+  --fg: #e8efe9;
+  --line: #3a4a44;
+  --brand: #9be4c9;
+  --accent-legacy: #cbeadb;
+}
+
+@theme inline {
+  --font-sans: var(--font-inter);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: #0b1412;
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: #ffffff;
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Utilities */
+.text-brand {
+  color: var(--brand);
+}
+.bg-brand {
+  background-color: var(--brand);
+}
+.border-brand {
+  border-color: var(--brand);
+}
+
+/* Deep-green vignette + mint bloom inspired by Image 2 */
+.bg-aura {
+  background: radial-gradient(
+      900px 650px at 75% 15%,
+      color-mix(in srgb, var(--primary) 20%, transparent) 0%,
+      transparent 60%
+    ), radial-gradient(700px 520px at 15% 85%, color-mix(in srgb, #5fbda1 14%, transparent) 0%, transparent 70%),
+    radial-gradient(1200px 900px at 20% -10%, rgba(0, 0, 0, 0.55) 0%, transparent 60%),
+    linear-gradient(180deg, #0f221e 0%, #0c1b17 100%);
+}
+
+/* Optional picturesque backdrop inspired by the landscape mock */
+.bg-landscape {
+  background-image: url("/images/landscape-soft.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: saturate(105%);
+}
+
+/* Circular "lens" motif inspired by Image 1 */
+.lens {
+  width: clamp(420px, 60vw, 980px);
+  height: clamp(420px, 60vw, 980px);
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06) 45%, transparent 60%),
+    radial-gradient(closest-side at 30% 30%, rgba(255, 255, 255, 0.06), transparent 70%);
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.08) inset, 0 25px 60px rgba(0, 0, 0, 0.35), 0 0 0 1px
+    rgba(255, 255, 255, 0.06);
+}
+
+/* Glass surface utility for cards/tiles inspired by Image 3 */
+.glass {
+  background: color-mix(in srgb, #ffffff 6%, var(--card));
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  border: 1px solid color-mix(in srgb, #ffffff 18%, transparent);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35), 0 1px 0 0 rgba(255, 255, 255, 0.05) inset;
+}
+
+/* Glass pill input treatment */
+.pill {
+  border-radius: 9999px;
+  background: color-mix(in srgb, #ffffff 7%, transparent);
+  border: 1px solid color-mix(in srgb, #ffffff 18%, transparent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* Buttons tuned to the new palette */
+.btn-brand {
+  background: var(--primary);
+  color: #0b1416;
+  transition: transform 140ms ease, box-shadow 180ms ease, background 140ms ease;
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--primary) 30%, transparent);
+}
+.btn-brand:hover {
+  transform: translateY(-1px);
+}
+.btn-brand:active {
+  transform: translateY(0);
+}
+
+.btn-ghost {
+  background: color-mix(in srgb, #ffffff 4%, transparent);
+  color: var(--foreground);
+  border: 1px solid color-mix(in srgb, #ffffff 10%, transparent);
+  transition: background 160ms ease, border-color 160ms ease;
+}
+.btn-ghost:hover {
+  background: color-mix(in srgb, #ffffff 8%, transparent);
+  border-color: color-mix(in srgb, #ffffff 16%, transparent);
+}
+
+/* Heading polish */
+.font-heading {
+  font-family: var(--font-heading-serif), ui-serif, Georgia, "Times New Roman", serif;
+  letter-spacing: -0.01em;
+}
+
+/* Purposeful Motion */
+@keyframes conductor {
+  0% {
+    transform: translateX(0%);
+  }
+  50% {
+    transform: translateX(10%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+.animate-conductor {
+  animation: conductor 1.2s ease-in-out infinite;
+}
+
+@keyframes rise {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-rise {
+  animation: rise 420ms ease-out both;
+}
+
+/* Typography */
+.code,
+.font-mono {
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html,
+body {
+  min-height: 100%;
+}
