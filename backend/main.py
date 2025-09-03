@@ -81,15 +81,47 @@ async def search(request: SearchRequest):
     """Process a search query through the multi-agent system"""
     try:
         # Record search in user history
-        personalization_service.add_search_history(request.user_id, request.query)
+        personalization_service.add_search_history(request.user_id or "default", request.query)
         
         result = await orchestrator.process_search_query(
             query=request.query,
-            user_id=request.user_id
+            user_id=request.user_id or "default"
         )
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Search processing failed: {str(e)}")
+
+@app.post("/search/gepa", response_model=SearchResponse)
+async def search_with_gepa(request: SearchRequest):
+    """Process a search query with GEPA optimization enabled"""
+    try:
+        # Record search in user history
+        personalization_service.add_search_history(request.user_id or "default", request.query)
+        
+        result = await orchestrator.process_search_query(
+            query=request.query,
+            user_id=request.user_id or "default",
+            use_gepa=True
+        )
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"GEPA search processing failed: {str(e)}")
+
+@app.post("/search/traditional")
+async def search_traditional(request: SearchRequest):
+    """Process a search query using traditional agents (no GEPA)"""
+    try:
+        # Record search in user history
+        personalization_service.add_search_history(request.user_id or "default", request.query)
+        
+        result = await orchestrator.process_search_query(
+            query=request.query,
+            user_id=request.user_id or "default",
+            use_gepa=False
+        )
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Traditional search processing failed: {str(e)}")
 
 @app.post("/feedback", response_model=FeedbackResponse)
 async def record_feedback(request: FeedbackRequest):
@@ -117,6 +149,25 @@ async def record_feedback(request: FeedbackRequest):
         personalization_service.record_feedback(
             request.user_id, request.result_id, feedback_value
         )
+        
+        # Also send feedback to GEPA agents for online learning
+        try:
+            gepa_reasoning_agent = orchestrator.agents.get("gepa_reasoning_001")
+            if gepa_reasoning_agent and hasattr(gepa_reasoning_agent, 'learn_from_feedback'):
+                # Create feedback structure for GEPA learning
+                feedback_data = [{
+                    "result_id": request.result_id,
+                    "type": request.feedback_type,
+                    "value": feedback_value
+                }]
+                user_context = {"user_id": request.user_id}
+                
+                await gepa_reasoning_agent.learn_from_feedback(
+                    request.query, [], feedback_data, user_context
+                )
+        except Exception as gepa_error:
+            # Don't fail the whole request if GEPA learning fails
+            print(f"GEPA learning error: {gepa_error}")
         
         return FeedbackResponse(
             status="success",
@@ -150,6 +201,80 @@ async def flush_metrics():
     """Flush metrics to persistent storage"""
     metrics_service.flush_metrics()
     return {"status": "success", "message": "Metrics flushed to storage"}
+
+@app.get("/gepa/metrics")
+async def get_gepa_metrics():
+    """Get GEPA optimization metrics and performance statistics"""
+    try:
+        gepa_reasoning_agent = orchestrator.agents.get("gepa_reasoning_001")
+        gepa_search_agent = orchestrator.agents.get("gepa_search_001")
+        
+        metrics = {
+            "gepa_reasoning": {},
+            "gepa_search": {},
+            "system_status": "active"
+        }
+        
+        if gepa_reasoning_agent and hasattr(gepa_reasoning_agent, 'get_optimization_metrics'):
+            metrics["gepa_reasoning"] = gepa_reasoning_agent.get_optimization_metrics()
+        
+        if gepa_search_agent and hasattr(gepa_search_agent, 'get_status'):
+            metrics["gepa_search"] = gepa_search_agent.get_status()
+        
+        return metrics
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get GEPA metrics: {str(e)}")
+
+@app.post("/gepa/optimize")
+async def trigger_gepa_optimization():
+    """Manually trigger GEPA optimization process"""
+    try:
+        gepa_reasoning_agent = orchestrator.agents.get("gepa_reasoning_001")
+        
+        if not gepa_reasoning_agent:
+            raise HTTPException(status_code=404, detail="GEPA reasoning agent not found")
+        
+        # Get optimization stats
+        stats = gepa_reasoning_agent.get_optimization_metrics() if hasattr(gepa_reasoning_agent, 'get_optimization_metrics') else {}
+        
+        return {
+            "status": "success",
+            "message": "GEPA optimization triggered",
+            "optimization_stats": stats
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to trigger GEPA optimization: {str(e)}")
+
+@app.get("/gepa/status")
+async def get_gepa_status():
+    """Get current status of GEPA optimization system"""
+    try:
+        gepa_agents = {
+            "gepa_reasoning_001": orchestrator.agents.get("gepa_reasoning_001"),
+            "gepa_search_001": orchestrator.agents.get("gepa_search_001")
+        }
+        
+        status = {}
+        for agent_id, agent in gepa_agents.items():
+            if agent:
+                status[agent_id] = {
+                    "active": True,
+                    "agent_status": agent.get_status(),
+                    "optimization_enabled": hasattr(agent, 'get_optimization_metrics')
+                }
+            else:
+                status[agent_id] = {
+                    "active": False,
+                    "error": "Agent not found"
+                }
+        
+        return {
+            "gepa_system_status": "active",
+            "agents": status,
+            "total_agents": len([a for a in gepa_agents.values() if a is not None])
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get GEPA status: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn
